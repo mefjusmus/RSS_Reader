@@ -1,34 +1,37 @@
 //
-//  NewsCell.m
+//  NewsCellWithDesc.m
 //  RSSReader
 //
-//  Created by Vladislav Suslov on 7.03.22.
+//  Created by Vladislav Suslov on 3.04.22.
 //
 
-#import "NewsCell.h"
+#import "NewsCellWithDesc.h"
 
 
-@interface NewsCell ()
-
+@interface NewsCellWithDesc ()
 @property (retain, nonatomic) IBOutlet UILabel *titleLabel;
+@property (retain, nonatomic) IBOutlet UILabel *descLabel;
 @property (retain, nonatomic) IBOutlet UILabel *dateLabel;
+
 
 @end
 
+@implementation NewsCellWithDesc
 
-@implementation NewsCell
 
--(void)setupWith:(NewsModel*)model {
+- (void)setupWith:(NewsModel*)model {
     _titleLabel.text = model.title;
     _dateLabel.text = model.dateString;
+    _descLabel.text = model.descInfo;
 }
 
 + (NSString *)identifier {
-    return @"kNewsCell";
+    return @"kNewsCellWithDesc";
 }
 
 - (void)dealloc {
     [_titleLabel release];
+    [_descLabel release];
     [_dateLabel release];
     [super dealloc];
 }

@@ -9,15 +9,20 @@
 #import "RssXMLParser.h"
 #import "NewsModel.h"
 #import "NewsCell.h"
+#import "NewsCellWithDesc.h"
+#import "WebViewController.h"
+
 
 #import <SafariServices/SafariServices.h>
 
-@interface MainViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface MainViewController () <UITableViewDataSource, UITableViewDelegate, ShowAnnotationForCellDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
 @property (retain, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (retain, nonatomic) NSArray<NewsModel*> *dataSource;
 @property (retain, nonatomic) id <RssParserProtocol> parser;
+@property (assign, nonatomic) NSInteger currentIndex;
+@property (assign, nonatomic) BOOL isTapped;
 
 @end
 
@@ -44,6 +49,7 @@
 
 -(void)setupTableView {
     [_tableView registerNib:[UINib nibWithNibName:@"NewsCell" bundle:nil] forCellReuseIdentifier:NewsCell.identifier];
+    [_tableView registerNib:[UINib nibWithNibName:@"NewsCellWithDesc" bundle:nil] forCellReuseIdentifier:NewsCellWithDesc.identifier];
 }
 
 - (void)startLoadingData {
@@ -61,13 +67,11 @@
 - (void) showAlertWithMessage: (NSString * ) message {
   UIAlertController * alertController = [UIAlertController alertControllerWithTitle: @"Alert"
                                  message: message
-                                 preferredStyle: UIAlertControllerStyleAlert
-                                ];
+                                 preferredStyle: UIAlertControllerStyleAlert];
   UIAlertAction * action = [UIAlertAction actionWithTitle: @ "Dismiss"
-                            style: UIAlertActionStyleDefault handler: ^ (UIAlertAction * _Nonnull action) {
-                              NSLog(@ "Dismiss Tapped");
-                            }
-                           ];
+                            style: UIAlertActionStyleDefault handler: ^ (UIAlertAction *action) {
+      [self loadDataAndParsingOnNewThread];
+                            }];
   [alertController addAction: action];
     dispatch_async(dispatch_get_main_queue(), ^{
             [self presentViewController: alertController animated:YES completion:nil];
@@ -101,21 +105,33 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NewsCell *cell = [tableView dequeueReusableCellWithIdentifier:NewsCell.identifier forIndexPath:indexPath];
     NewsModel *model = _dataSource[indexPath.row];
-    [cell setupWith:model];
-    return cell;
+    if (_isTapped && indexPath.row == _currentIndex) {
+        _isTapped = false;
+        NewsCellWithDesc *cellWithDesc = [tableView dequeueReusableCellWithIdentifier:NewsCellWithDesc.identifier forIndexPath:indexPath];
+        [cellWithDesc setupWith:model];
+        return cellWithDesc;
+    } else {
+        NewsCell *cell = [tableView dequeueReusableCellWithIdentifier:NewsCell.identifier forIndexPath:indexPath];
+        [cell setDelegate:self];
+        [cell.annotationButton setTag: indexPath.row];
+        [cell setupWith: model];
+        return cell;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     //    [[UIApplication sharedApplication] openURL:_dataSource[indexPath.row].link options:@{} completionHandler:nil];
     
-    SFSafariViewController *controller = [[SFSafariViewController alloc] initWithURL:_dataSource[indexPath.row].link];
-    controller.modalPresentationStyle = UIModalPresentationOverFullScreen;
-    controller.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    
-    [self presentViewController:controller animated:YES completion:nil];
+//    SFSafariViewController *controller = [[SFSafariViewController alloc] initWithURL:_dataSource[indexPath.row].link];
+//    controller.modalPresentationStyle = UIModalPresentationOverFullScreen;
+//    controller.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+//
+//    [self presentViewController:controller animated:YES completion:nil];
+    WebViewController *webViewController = [[WebViewController alloc] initWithLink:_dataSource[indexPath.row].link];
+    [self.navigationController pushViewController: webViewController animated:true];
 }
 
 #pragma mark - Setters
@@ -129,5 +145,21 @@
 - (void) sendErrorWithMessage:(NSString *)message {
     [self showAlertWithMessage: message];
 }
+
+
+- (void) buttonDidTappedAtIndex:(NSInteger)index {
+    _isTapped = true;
+    _currentIndex = index;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    NSArray *indexPaths = [NSArray arrayWithObject:indexPath];
+    [_tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
+//    [_tableView reloadData];
+}
+
+- (void) showWebView {
+    
+    
+}
+
 
 @end

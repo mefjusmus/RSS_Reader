@@ -12,6 +12,7 @@
 
 @property (copy, nonatomic, readwrite) NSString *title;
 @property (copy, nonatomic, readwrite) NSURL *link;
+@property (copy, nonatomic, readwrite) NSString *descInfo;
 @property (copy, nonatomic, readwrite) NSDate *publicationDate;
 @property (copy, nonatomic, readwrite) NSString *dateString;
 
@@ -28,6 +29,7 @@
         _title = [[[ParserHelper getStringInDictionary:dictionary forKey:@"title"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] copy];
         _link = [[NSURL URLWithString:[ParserHelper getUrlInDictionary:dictionary forKey:@"link"]] copy];
         _publicationDate = [[ParserHelper getDateFromStringInDictionary:dictionary forKey:@"pubDate"] copy];
+        _descInfo = [[[ParserHelper getStringInDictionary:dictionary forKey:@"description"]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]copy];
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"yyyy-MM-dd 'at' HH:mm";
@@ -48,6 +50,8 @@
     _publicationDate = nil;
     [_dateString release];
     _dateString = nil;
+    [_descInfo release];
+    _descInfo = nil;
     
     [super dealloc];
 }

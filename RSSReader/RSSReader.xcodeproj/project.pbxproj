@@ -18,6 +18,10 @@
 		866549B027D151910011AF08 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 866549AF27D151910011AF08 /* Assets.xcassets */; };
 		866549B327D151910011AF08 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 866549B127D151910011AF08 /* LaunchScreen.storyboard */; };
 		866549B627D151910011AF08 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 866549B527D151910011AF08 /* main.m */; };
+		86BC57B127FA04E5001F0711 /* NewsCellWithDesc.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BC57AF27FA04E5001F0711 /* NewsCellWithDesc.m */; };
+		86BC57B227FA04E5001F0711 /* NewsCellWithDesc.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86BC57B027FA04E5001F0711 /* NewsCellWithDesc.xib */; };
+		86BC57DC27FB70F3001F0711 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86BC57DA27FB70F3001F0711 /* WebViewController.m */; };
+		86BC57DD27FB70F3001F0711 /* WebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86BC57DB27FB70F3001F0711 /* WebViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +44,12 @@
 		866549B227D151910011AF08 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		866549B427D151910011AF08 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		866549B527D151910011AF08 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		86BC57AE27FA04E4001F0711 /* NewsCellWithDesc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewsCellWithDesc.h; sourceTree = "<group>"; };
+		86BC57AF27FA04E5001F0711 /* NewsCellWithDesc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewsCellWithDesc.m; sourceTree = "<group>"; };
+		86BC57B027FA04E5001F0711 /* NewsCellWithDesc.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsCellWithDesc.xib; sourceTree = "<group>"; };
+		86BC57D927FB70F3001F0711 /* WebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		86BC57DA27FB70F3001F0711 /* WebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
+		86BC57DB27FB70F3001F0711 /* WebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WebViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +77,7 @@
 		4148533227D53CAE009C6E59 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				86BC57D827FB70B8001F0711 /* WebView */,
 				4148533327D53CB7009C6E59 /* Main */,
 			);
 			path = Controllers;
@@ -75,7 +86,8 @@
 		4148533327D53CB7009C6E59 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				4148BC7F27D56734004E7C0D /* Cell */,
+				86BC57AD27FA04AB001F0711 /* NewsCellWithDesc */,
+				4148BC7F27D56734004E7C0D /* NewsCell */,
 				866549A927D1518F0011AF08 /* MainViewController.h */,
 				866549AA27D1518F0011AF08 /* MainViewController.m */,
 				4148533427D53DD5009C6E59 /* MainViewController.xib */,
@@ -92,14 +104,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		4148BC7F27D56734004E7C0D /* Cell */ = {
+		4148BC7F27D56734004E7C0D /* NewsCell */ = {
 			isa = PBXGroup;
 			children = (
 				4148BC8027D5675C004E7C0D /* NewsCell.h */,
 				4148BC8127D5675C004E7C0D /* NewsCell.m */,
 				4148BC8227D5675C004E7C0D /* NewsCell.xib */,
 			);
-			path = Cell;
+			path = NewsCell;
 			sourceTree = "<group>";
 		};
 		8665499727D1518F0011AF08 = {
@@ -140,6 +152,26 @@
 				4148BC7D27D55C24004E7C0D /* ParserHelper.m */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		86BC57AD27FA04AB001F0711 /* NewsCellWithDesc */ = {
+			isa = PBXGroup;
+			children = (
+				86BC57AE27FA04E4001F0711 /* NewsCellWithDesc.h */,
+				86BC57AF27FA04E5001F0711 /* NewsCellWithDesc.m */,
+				86BC57B027FA04E5001F0711 /* NewsCellWithDesc.xib */,
+			);
+			path = NewsCellWithDesc;
+			sourceTree = "<group>";
+		};
+		86BC57D827FB70B8001F0711 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				86BC57D927FB70F3001F0711 /* WebViewController.h */,
+				86BC57DA27FB70F3001F0711 /* WebViewController.m */,
+				86BC57DB27FB70F3001F0711 /* WebViewController.xib */,
+			);
+			path = WebView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,6 +234,8 @@
 				866549B327D151910011AF08 /* LaunchScreen.storyboard in Resources */,
 				4148533527D53DD5009C6E59 /* MainViewController.xib in Resources */,
 				4148BC8427D5675C004E7C0D /* NewsCell.xib in Resources */,
+				86BC57DD27FB70F3001F0711 /* WebViewController.xib in Resources */,
+				86BC57B227FA04E5001F0711 /* NewsCellWithDesc.xib in Resources */,
 				866549B027D151910011AF08 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -217,7 +251,9 @@
 				4148BC7E27D55C24004E7C0D /* ParserHelper.m in Sources */,
 				866549AB27D1518F0011AF08 /* MainViewController.m in Sources */,
 				4148BC8327D5675C004E7C0D /* NewsCell.m in Sources */,
+				86BC57DC27FB70F3001F0711 /* WebViewController.m in Sources */,
 				866549A527D1518F0011AF08 /* AppDelegate.m in Sources */,
+				86BC57B127FA04E5001F0711 /* NewsCellWithDesc.m in Sources */,
 				866549B627D151910011AF08 /* main.m in Sources */,
 				8624B71927D385BC009B3E84 /* RssXMLParser.m in Sources */,
 			);

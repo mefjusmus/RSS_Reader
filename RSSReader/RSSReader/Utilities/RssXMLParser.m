@@ -29,8 +29,6 @@
                     [NSURL URLWithString: @"https://www.jpl.nasa.gov/feeds/news"]
                                          options: NSDataReadingUncached
                                          error: &error];
-//    @"https://feeds.bbci.co.uk/news/video_and_audio/world/rss.xml
-    
     if (error) {
         [_alertDelegate sendErrorWithMessage: @"Something went wrong! Check your connection"];
     }
@@ -40,6 +38,7 @@
     [_parser parse];
     error = [_parser parserError];
     [_parser release];
+    
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
@@ -57,15 +56,14 @@
     }
     else {
         [self.mstrXMLString appendString: string];
-        NSLog(@"mstrXMLString retain count = %ld", [self.mstrXMLString retainCount]);
     }
-    NSLog(@"mstrXMLString retain count = %ld", [self.mstrXMLString retainCount]);
 }
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
     if ([elementName isEqualToString: @"title"]
         || [elementName isEqualToString: @"pubDate"]
-        || [elementName isEqualToString: @"link"]) {
+        || [elementName isEqualToString: @"link"]
+        || [elementName isEqualToString:@"description"]) {
         [self.mdictXMLPart setObject: self.mstrXMLString forKey: elementName];
     }
     if ([elementName isEqualToString:@"item"]) {
