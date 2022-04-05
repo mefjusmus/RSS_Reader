@@ -24,6 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self createToolBar];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -33,6 +34,19 @@
     NSURLRequest *request = [NSURLRequest requestWithURL: _link];
     [_webView loadRequest: request];
     [self.view addSubview: _webView];
+}
+
+- (void) createToolBar {
+    UIBarButtonItem *spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace menu: nil];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"lessthan"] menu:nil];
+    UIBarButtonItem *forwardButton = [[UIBarButtonItem alloc] initWithImage:[UIImage systemImageNamed:@"greaterthan"] menu:nil];
+    UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh menu:nil];
+    UIBarButtonItem *stopButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop menu:nil];
+    UIBarButtonItem *safariButton = [[UIBarButtonItem alloc] initWithImage: [UIImage systemImageNamed:@"safari"] menu:nil];
+    NSArray *buttons = [NSArray arrayWithObjects:backButton, spacer, forwardButton, spacer, refreshButton, spacer, stopButton, spacer, safariButton, nil];
+    [self setToolbarItems: buttons];
+    [self.navigationController.toolbar.layer setBackgroundColor: [UIColor systemBackgroundColor].CGColor];
+    [self.navigationController setToolbarHidden: false];
 }
 
 

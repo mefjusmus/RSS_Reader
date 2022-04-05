@@ -22,7 +22,7 @@
 @property (retain, nonatomic) NSArray<NewsModel*> *dataSource;
 @property (retain, nonatomic) id <RssParserProtocol> parser;
 @property (assign, nonatomic) NSInteger currentIndex;
-@property (assign, nonatomic) BOOL isTapped;
+@property (assign, nonatomic) BOOL annotationButtonIsTapped;
 
 @end
 
@@ -106,8 +106,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NewsModel *model = _dataSource[indexPath.row];
-    if (_isTapped && indexPath.row == _currentIndex) {
-        _isTapped = false;
+    if (_annotationButtonIsTapped && indexPath.row == _currentIndex) {
+        _annotationButtonIsTapped = false;
         NewsCellWithDesc *cellWithDesc = [tableView dequeueReusableCellWithIdentifier:NewsCellWithDesc.identifier forIndexPath:indexPath];
         [cellWithDesc setupWith:model];
         return cellWithDesc;
@@ -148,7 +148,7 @@
 
 
 - (void) buttonDidTappedAtIndex:(NSInteger)index {
-    _isTapped = true;
+    _annotationButtonIsTapped = true;
     _currentIndex = index;
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     NSArray *indexPaths = [NSArray arrayWithObject:indexPath];

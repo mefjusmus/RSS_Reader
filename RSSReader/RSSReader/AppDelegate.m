@@ -16,6 +16,13 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    if (@available(iOS 15.0, *)) {
+        UINavigationBarAppearance *navBarAppearance = [[UINavigationBarAppearance alloc] init];
+      navBarAppearance.backgroundColor = [UIColor redColor];
+        [navBarAppearance configureWithOpaqueBackground];
+        [UINavigationBar appearance].standardAppearance = navBarAppearance;
+        [UINavigationBar appearance].scrollEdgeAppearance = navBarAppearance;
+    }
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     RssXMLParser *parser = [[RssXMLParser new] autorelease];
     MainViewController *mainViewController = [[[MainViewController alloc] initWithParser: parser]autorelease];
@@ -28,5 +35,6 @@
     
     return YES;
 }
+
 
 @end

@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (retain, nonatomic) WKWebView *webView;
 @property (retain, nonatomic) NSURL *link;
+@property (retain, nonatomic) UIToolbar *toolBar;
 
 -(instancetype) initWithLink: (NSURL *) link;
 
