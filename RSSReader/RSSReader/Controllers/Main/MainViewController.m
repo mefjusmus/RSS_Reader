@@ -13,8 +13,6 @@
 #import "WebViewController.h"
 
 
-#import <SafariServices/SafariServices.h>
-
 @interface MainViewController () <UITableViewDataSource, UITableViewDelegate, ShowAnnotationForCellDelegate>
 
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
@@ -53,7 +51,7 @@
 }
 
 - (void)startLoadingData {
-    __weak __typeof(self) weakSelf = self;
+    __weak typeof(self) weakSelf = self;
     [self.parser parseWithCompletionHandler: ^void(NSArray <NewsModel*> *array, NSError *error) {
         weakSelf.dataSource = [[[NSArray arrayWithArray: array] copy] autorelease];
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -124,12 +122,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     //    [[UIApplication sharedApplication] openURL:_dataSource[indexPath.row].link options:@{} completionHandler:nil];
-    
-//    SFSafariViewController *controller = [[SFSafariViewController alloc] initWithURL:_dataSource[indexPath.row].link];
-//    controller.modalPresentationStyle = UIModalPresentationOverFullScreen;
-//    controller.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-//
-//    [self presentViewController:controller animated:YES completion:nil];
     WebViewController *webViewController = [[WebViewController alloc] initWithLink:_dataSource[indexPath.row].link];
     [self.navigationController pushViewController: webViewController animated:true];
 }

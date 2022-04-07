@@ -11,11 +11,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WebViewController : UIViewController <UIWebViewDelegate>
+@interface WebViewController : UIViewController <UIWebViewDelegate, WKNavigationDelegate, WKUIDelegate>
 
 @property (retain, nonatomic) WKWebView *webView;
 @property (retain, nonatomic) NSURL *link;
-@property (retain, nonatomic) UIToolbar *toolBar;
+@property (retain, nonatomic) UIProgressView *progressView;
 
 -(instancetype) initWithLink: (NSURL *) link;
 
