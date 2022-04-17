@@ -25,7 +25,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _webView.UIDelegate = self;
+//    _webView.UIDelegate = self;
     [self createToolBar];
     _progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
     [self.navigationController.navigationBar addSubview:_progressView];
@@ -52,7 +52,8 @@
 #pragma mark WKNavigationDelegate
 
 - (void) webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
-    [_progressView setProgress: 0.2 animated:true];
+    [_progressView setHidden: false];
+    [_progressView setProgress: 0.2 animated: true];
 }
 
 - (void) webView:(WKWebView *)webView didCommitNavigation:(WKNavigation *)navigation {
@@ -60,11 +61,12 @@
 }
 
 -(void) webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
-    [_progressView setHidden:true];
+    [_progressView setHidden: true];
+    [_progressView setProgress: 0.f];
 }
 
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
-    [_progressView setHidden:true];
+    [_progressView setHidden: true];
 }
 
 
@@ -152,11 +154,4 @@
     [_webView release];
     [super dealloc];
 }
-@end
-
-
-@interface WebViewController (ButtonTypes)
-
-
-
 @end

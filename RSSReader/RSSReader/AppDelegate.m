@@ -21,9 +21,7 @@
     RssXMLParser *parser = [[RssXMLParser new] autorelease];
     MainViewController *mainViewController = [[[MainViewController alloc] initWithParser: parser]autorelease];
     UINavigationController *navController = [[[UINavigationController alloc] initWithRootViewController: mainViewController] autorelease];
-//    self.window.rootViewController = [[[MainViewController alloc] initWithParser: parser] autorelease];
     self.window.rootViewController = navController;
-//    parser.alertDelegate = (MainViewController *) self.window.rootViewController;
     parser.alertDelegate = mainViewController;
     [self.window makeKeyAndVisible];
     
@@ -33,7 +31,7 @@
 - (void) setNavBarAppearance {
     if (@available(iOS 15.0, *)) {
         UINavigationBarAppearance *navBarAppearance = [[UINavigationBarAppearance alloc] init];
-      navBarAppearance.backgroundColor = [UIColor redColor];
+//        navBarAppearance.backgroundColor = [UIColor lightGrayColor];
         [navBarAppearance configureWithOpaqueBackground];
         [UINavigationBar appearance].standardAppearance = navBarAppearance;
         [UINavigationBar appearance].scrollEdgeAppearance = navBarAppearance;

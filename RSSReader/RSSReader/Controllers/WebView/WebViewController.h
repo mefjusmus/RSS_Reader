@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WebViewController : UIViewController <UIWebViewDelegate, WKNavigationDelegate, WKUIDelegate>
+@interface WebViewController : UIViewController <UIWebViewDelegate, WKNavigationDelegate>
 
 @property (retain, nonatomic) WKWebView *webView;
 @property (retain, nonatomic) NSURL *link;
