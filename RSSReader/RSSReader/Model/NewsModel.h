@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (copy, nonatomic, readonly) NSString *descInfo;
 @property (copy, nonatomic, readonly) NSDate *publicationDate;
 @property (copy, nonatomic, readonly) NSString *dateString;
+@property (assign, nonatomic) BOOL isExpand;
 
 -(instancetype)initWithDictionary:(NSDictionary*)dictionary;
 

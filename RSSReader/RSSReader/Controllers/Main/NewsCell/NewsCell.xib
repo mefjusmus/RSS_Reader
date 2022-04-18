@@ -43,7 +43,6 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
-                <outlet property="annotationButton" destination="VRs-12-pkR" id="pZd-34-u0y"/>
                 <outlet property="titleLabel" destination="JFl-qZ-xd7" id="wW0-5Y-Xyf"/>
             </connections>
             <point key="canvasLocation" x="112.31884057971016" y="-39.84375"/>

@@ -20,12 +20,10 @@
 @property (retain, nonatomic) NSArray<NewsModel*> *dataSource;
 @property (retain, nonatomic) id <RssParserProtocol> parser;
 @property (assign, nonatomic) NSInteger currentIndex;
-@property (assign, nonatomic) BOOL annotationButtonIsTapped;
 
 @end
 
 @implementation MainViewController
-
 
 
 - (instancetype)initWithParser: (id<RssParserProtocol>) parser {
@@ -77,15 +75,13 @@
 }
 
 - (void) loadDataAndParsingOnNewThread {
+    __weak typeof(self) weakSelf = self;
     [self.activityIndicator startAnimating];
     [NSThread detachNewThreadWithBlock:^{
-        [self startLoadingData];
+        [weakSelf startLoadingData];
     }];
-    
 }
 
-
-    
 - (void)dealloc {
     [_tableView release];
     _tableView = nil;
@@ -104,15 +100,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NewsModel *model = _dataSource[indexPath.row];
-    if (_annotationButtonIsTapped && indexPath.row == _currentIndex) {
-        _annotationButtonIsTapped = false;
+    if (model.isExpand) {
         NewsCellWithDesc *cellWithDesc = [tableView dequeueReusableCellWithIdentifier:NewsCellWithDesc.identifier forIndexPath:indexPath];
         [cellWithDesc setupWith:model];
         return cellWithDesc;
     } else {
         NewsCell *cell = [tableView dequeueReusableCellWithIdentifier:NewsCell.identifier forIndexPath:indexPath];
         [cell setDelegate:self];
-        [cell.annotationButton setTag: indexPath.row];
         [cell setupWith: model];
         return cell;
     }
@@ -120,8 +114,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    //    [[UIApplication sharedApplication] openURL:_dataSource[indexPath.row].link options:@{} completionHandler:nil];
     WebViewController *webViewController = [[WebViewController alloc] initWithLink:_dataSource[indexPath.row].link];
     [self.navigationController pushViewController: webViewController animated:true];
 }
@@ -139,19 +131,24 @@
 }
 
 
-- (void) buttonDidTappedAtIndex:(NSInteger)index {
-    _annotationButtonIsTapped = true;
-    _currentIndex = index;
+#pragma mark - UITableViewDataSource, UITableViewDelegate
+- (void)expandNewsWith:(NewsModel *)model {
+    NewsModel *expanded = [[_dataSource filteredArrayUsingPredicate:
+                        [NSPredicate predicateWithFormat:@"self.isExpand == YES"]] firstObject];
+    expanded.isExpand = NO;
+    
+    NewsModel *news = [[_dataSource filteredArrayUsingPredicate:
+                        [NSPredicate predicateWithFormat:@"self.link == %@", model.link]] firstObject];
+    news.isExpand = YES;
+    
+    NSInteger index = [_dataSource indexOfObject:model];
+    NSInteger expandedIndex = [_dataSource indexOfObject:expanded];
+    
+    NSIndexPath *expandedIndexPath = [NSIndexPath indexPathForRow:expandedIndex inSection:0];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-    NSArray *indexPaths = [NSArray arrayWithObject:indexPath];
+    
+    NSArray *indexPaths = [NSArray arrayWithObjects:expandedIndexPath, indexPath, nil];
     [_tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-//    [_tableView reloadData];
 }
-
-- (void) showWebView {
-    
-    
-}
-
 
 @end

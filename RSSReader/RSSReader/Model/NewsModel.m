@@ -34,7 +34,6 @@
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.dateFormat = @"yyyy-MM-dd 'at' HH:mm";
         _dateString = [[dateFormatter stringFromDate:_publicationDate] copy];
-        NSLog(@"dateFormatter = %lu", [dateFormatter retainCount]);
         [dateFormatter release];
     }
     

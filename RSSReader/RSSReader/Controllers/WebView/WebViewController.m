@@ -8,11 +8,20 @@
 #import "WebViewController.h"
 #import <SafariServices/SafariServices.h>
 
-@interface WebViewController ()
+typedef NS_ENUM(NSInteger, WebViewButtonType) {
+    WebViewBack,
+    WebViewForward,
+    WebViewRefresh,
+    WebViewStopDownload,
+    WebViewGoToSafari
+};
+
+@interface WebViewController () <WKNavigationDelegate>
 
 @end
 
 @implementation WebViewController
+
 
 - (instancetype) initWithLink:(NSURL *)link {
     self = [super init];
@@ -25,9 +34,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    _webView.UIDelegate = self;
+    //    _webView.UIDelegate = self;
     [self createToolBar];
-    _progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar];
+    _progressView = [[[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar] autorelease];
     [self.navigationController.navigationBar addSubview:_progressView];
     
     [_progressView.leadingAnchor constraintEqualToAnchor:self.navigationController.navigationBar.leadingAnchor].active = YES;
@@ -44,10 +53,7 @@
     NSURLRequest *request = [NSURLRequest requestWithURL: _link];
     [_webView loadRequest: request];
     [self.view addSubview: _webView];
-    
 }
-
-
 
 #pragma mark WKNavigationDelegate
 
@@ -70,66 +76,66 @@
 }
 
 
-
-
-- (void) createToolBar {
+- (void)createToolBar {
     UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
                                initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace menu: nil];
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
-                                    initWithImage:[UIImage systemImageNamed:@"chevron.backward"]
+                                   initWithImage:[UIImage systemImageNamed:@"chevron.backward"]
                                    style:UIBarButtonItemStylePlain
                                    target:self
                                    action:@selector(didTapToolbarButton:)];
-    [backButton setTag: 1001];
+    [backButton setTag: WebViewBack];
     
     UIBarButtonItem *forwardButton = [[UIBarButtonItem alloc]
-                                       initWithImage:[UIImage systemImageNamed:@"chevron.forward"]
-                                       style:UIBarButtonItemStylePlain
-                                       target:self
-                                      action:@selector(didTapToolbarButton:)];
-    [forwardButton setTag: 1002];
-    
-    UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc]
-                                       initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-                                       target:self
-                                       action:@selector(didTapToolbarButton:)];
-    [refreshButton setTag: 1003];
-    
-    UIBarButtonItem *stopButton = [[UIBarButtonItem alloc]
-                                    initWithBarButtonSystemItem:UIBarButtonSystemItemStop
-                                    target:self
-                                    action:@selector(didTapToolbarButton:)];
-    [stopButton setTag: 1004];
-    
-    UIBarButtonItem *safariButton = [[UIBarButtonItem alloc]
-                                      initWithImage: [UIImage systemImageNamed:@"safari"]
+                                      initWithImage:[UIImage systemImageNamed:@"chevron.forward"]
                                       style:UIBarButtonItemStylePlain
                                       target:self
                                       action:@selector(didTapToolbarButton:)];
+    [forwardButton setTag: WebViewForward];
+    
+    UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc]
+                                      initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                      target:self
+                                      action:@selector(didTapToolbarButton:)];
+    [refreshButton setTag: WebViewRefresh];
+    
+    UIBarButtonItem *stopButton = [[UIBarButtonItem alloc]
+                                   initWithBarButtonSystemItem:UIBarButtonSystemItemStop
+                                   target:self
+                                   action:@selector(didTapToolbarButton:)];
+    [stopButton setTag: WebViewGoToSafari];
+    
+    UIBarButtonItem *safariButton = [[UIBarButtonItem alloc]
+                                     initWithImage: [UIImage systemImageNamed:@"safari"]
+                                     style:UIBarButtonItemStylePlain
+                                     target:self
+                                     action:@selector(didTapToolbarButton:)];
     [safariButton setTag: 1005];
     
     NSArray *buttons = [NSArray arrayWithObjects:backButton, spacer, forwardButton, spacer, refreshButton, spacer, stopButton, spacer, safariButton, nil];
+    
+    self.navigationController.toolbar.backgroundColor = [UIColor whiteColor];
     [self setToolbarItems: buttons];
-    [self.navigationController.toolbar.layer setBackgroundColor: [UIColor systemBackgroundColor].CGColor];
+    [self.navigationController.toolbar.layer setBackgroundColor: [UIColor whiteColor].CGColor];
     [self.navigationController setHidesBarsOnSwipe:true];
     [self.navigationController setToolbarHidden: false];
 }
 
 - (void) didTapToolbarButton: (UIBarButtonItem *) sender {
     switch (sender.tag) {
-        case 1001:
+        case WebViewBack:
             [_webView goBack];
             break;
-        case 1002:
+        case WebViewForward:
             [_webView goForward];
             break;
-        case 1003:
+        case WebViewRefresh:
             [_webView reload];
             break;
-        case 1004:
+        case WebViewStopDownload:
             [_webView stopLoading];
             break;
-        case 1005:
+        case WebViewGoToSafari:
             [self loadInSafariBrowser];
             break;
         default:
@@ -137,20 +143,17 @@
     }
 }
 
-- (void) loadInSafariBrowser {
-        SFSafariViewController *controller = [[SFSafariViewController alloc] initWithURL:_link];
-        controller.modalPresentationStyle = UIModalPresentationOverFullScreen;
-        controller.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+- (void)loadInSafariBrowser {
+    SFSafariViewController *controller = [[SFSafariViewController alloc] initWithURL:_link];
+    controller.modalPresentationStyle = UIModalPresentationOverFullScreen;
+    controller.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     
-        [self presentViewController:controller animated:YES completion:nil];
+    [self presentViewController:controller animated:YES completion:nil];
 }
-
-
-
-
 
 - (void)dealloc {
     [_link release];
+    [_progressView release];
     [_webView release];
     [super dealloc];
 }

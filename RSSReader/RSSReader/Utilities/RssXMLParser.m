@@ -10,9 +10,9 @@
 
 @interface RssXMLParser () 
 
-@property (nonatomic, retain) NSMutableArray *marrXMLData;
-@property (nonatomic, retain) NSMutableString *mstrXMLString;
-@property (nonatomic, retain) NSMutableDictionary *mdictXMLPart;
+@property (nonatomic, retain) NSMutableArray *XMLData;
+@property (nonatomic, retain) NSMutableString *XMLString;
+@property (nonatomic, retain) NSMutableDictionary *XMLDict;
 @property (nonatomic, copy) void (^completion)(NSArray<NewsModel*>*, NSError *);
 @property (nonatomic, retain) NSXMLParser *parser;
 
@@ -22,7 +22,7 @@
 
 - (void)parseWithCompletionHandler:(ParserCompletion) completion 
 {
-    self.completion = completion;
+    _completion = completion;
 
     NSError *error = nil;
     NSData *data = [NSData dataWithContentsOfURL:
@@ -43,19 +43,19 @@
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
     if ([elementName isEqualToString:@"rss"]) {
-        self.marrXMLData = [[[NSMutableArray alloc] init] autorelease];
+        self.XMLData = [[[NSMutableArray alloc] init] autorelease];
     }
     if ([elementName isEqualToString:@"item"]) {
-        self.mdictXMLPart = [[[NSMutableDictionary alloc] init] autorelease];
+        self.XMLDict = [[[NSMutableDictionary alloc] init] autorelease];
     }
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-    if (!self.mstrXMLString) {
-        self.mstrXMLString = [[[NSMutableString alloc] initWithString: string] autorelease];
+    if (!self.XMLString) {
+        self.XMLString = [[[NSMutableString alloc] initWithString: string] autorelease];
     }
     else {
-        [self.mstrXMLString appendString: string];
+        [self.XMLString appendString: string];
     }
 }
 
@@ -64,22 +64,22 @@
         || [elementName isEqualToString: @"pubDate"]
         || [elementName isEqualToString: @"link"]
         || [elementName isEqualToString:@"description"]) {
-        [self.mdictXMLPart setObject: self.mstrXMLString forKey: elementName];
+        [self.XMLDict setObject: self.XMLString forKey: elementName];
     }
     if ([elementName isEqualToString:@"item"]) {
-        [self.marrXMLData addObject: self.mdictXMLPart];
+        [self.XMLData addObject: self.XMLDict];
     }
-    self.mstrXMLString = nil;
+    self.XMLString = nil;
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser {
     if (_completion) {
-        NSMutableArray *newsArray = [NSMutableArray arrayWithCapacity:[self.marrXMLData count]];
-        [self.marrXMLData enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
+        NSMutableArray *newsArray = [NSMutableArray arrayWithCapacity:[self.XMLData count]];
+        [self.XMLData enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
             NewsModel *mapObj = [[[NewsModel alloc] initWithDictionary:obj] autorelease];
             [newsArray addObject:mapObj];
         }];
-        self.completion(newsArray, nil);
+        _completion(newsArray, nil);
     }
 }
 
@@ -99,12 +99,12 @@
 
 
 - (void)dealloc {
-    [_mstrXMLString release];
-    _mstrXMLString = nil;
-    [_marrXMLData release];
-    _marrXMLData = nil;
-    [_mdictXMLPart release];
-    _mdictXMLPart = nil;
+    [_XMLString release];
+    _XMLString = nil;
+    [_XMLData release];
+    _XMLData = nil;
+    [_XMLDict release];
+    _XMLDict = nil;
     [_completion release];
     _completion = nil;
     

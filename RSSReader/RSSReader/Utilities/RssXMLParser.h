@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import "NewsModel.h"
-//#import "MainViewController.h"
 
 
 NS_ASSUME_NONNULL_BEGIN

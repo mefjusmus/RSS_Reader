@@ -12,17 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 @class NewsCell;
 
 @protocol ShowAnnotationForCellDelegate <NSObject>
-
-- (void) buttonDidTappedAtIndex: (NSInteger) index;
+- (void)expandNewsWith:(NewsModel*) model;
 
 @end
 
 
 @interface NewsCell : UITableViewCell
 @property (retain, nonatomic) IBOutlet UILabel *titleLabel;
-@property (retain, nonatomic) IBOutlet UILabel *dateLabel;
-@property (retain, nonatomic) IBOutlet UILabel *descLabel;
-@property (retain, nonatomic) IBOutlet UIButton *annotationButton;
 @property (assign, nonatomic) id <ShowAnnotationForCellDelegate> delegate;
 
 +(NSString *)identifier;

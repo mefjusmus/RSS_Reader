@@ -1,9 +1,9 @@
-//
+
 //  ParseHelper.m
 //  RSSReader
-//
+
 //  Created by Vladislav Suslov on 5.03.22.
-//
+
 
 #import "ParserHelper.h"
 
@@ -27,7 +27,7 @@
         return _number;
     }
     return [NSNumber numberWithBool:NO];
-    
+
 }
 
 + (NSNumber *)getLongLongNumberInDictionary:(NSDictionary *)dictionary forKey:(NSString *)key
@@ -47,7 +47,7 @@
         }
     }
     return [NSNumber numberWithInt:-1];
-    
+
 }
 
 + (NSArray *)getArrayInDictionary:(NSDictionary *)dictionary forKey:(NSString *)key
