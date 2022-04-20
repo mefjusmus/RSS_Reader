@@ -18,6 +18,9 @@ typedef NS_ENUM(NSInteger, WebViewButtonType) {
 
 @interface WebViewController () <WKNavigationDelegate>
 
+@property (strong, nonatomic) UIBarButtonItem *backButton;
+@property (strong, nonatomic) UIBarButtonItem *forwardButton;
+
 @end
 
 @implementation WebViewController
@@ -34,15 +37,8 @@ typedef NS_ENUM(NSInteger, WebViewButtonType) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //    _webView.UIDelegate = self;
     [self createToolBar];
-    _progressView = [[[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar] autorelease];
-    [self.navigationController.navigationBar addSubview:_progressView];
-    
-    [_progressView.leadingAnchor constraintEqualToAnchor:self.navigationController.navigationBar.leadingAnchor].active = YES;
-    [_progressView.trailingAnchor constraintEqualToAnchor:self.navigationController.navigationBar.trailingAnchor].active = YES;
-    [_progressView.topAnchor constraintEqualToAnchor:self.navigationController.navigationBar.bottomAnchor].active = YES;
-    [_progressView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self createProgressView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -53,6 +49,7 @@ typedef NS_ENUM(NSInteger, WebViewButtonType) {
     NSURLRequest *request = [NSURLRequest requestWithURL: _link];
     [_webView loadRequest: request];
     [self.view addSubview: _webView];
+    
 }
 
 #pragma mark WKNavigationDelegate
@@ -69,6 +66,8 @@ typedef NS_ENUM(NSInteger, WebViewButtonType) {
 -(void) webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
     [_progressView setHidden: true];
     [_progressView setProgress: 0.f];
+    _backButton.enabled = [webView canGoBack];
+    _forwardButton.enabled = [webView canGoForward];
 }
 
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
@@ -79,19 +78,19 @@ typedef NS_ENUM(NSInteger, WebViewButtonType) {
 - (void)createToolBar {
     UIBarButtonItem *spacer = [[UIBarButtonItem alloc]
                                initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace menu: nil];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc]
+    _backButton = [[UIBarButtonItem alloc]
                                    initWithImage:[UIImage systemImageNamed:@"chevron.backward"]
                                    style:UIBarButtonItemStylePlain
                                    target:self
                                    action:@selector(didTapToolbarButton:)];
-    [backButton setTag: WebViewBack];
+    [_backButton setTag: WebViewBack];
     
-    UIBarButtonItem *forwardButton = [[UIBarButtonItem alloc]
+    _forwardButton = [[UIBarButtonItem alloc]
                                       initWithImage:[UIImage systemImageNamed:@"chevron.forward"]
                                       style:UIBarButtonItemStylePlain
                                       target:self
                                       action:@selector(didTapToolbarButton:)];
-    [forwardButton setTag: WebViewForward];
+    [_forwardButton setTag: WebViewForward];
     
     UIBarButtonItem *refreshButton = [[UIBarButtonItem alloc]
                                       initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
@@ -103,22 +102,21 @@ typedef NS_ENUM(NSInteger, WebViewButtonType) {
                                    initWithBarButtonSystemItem:UIBarButtonSystemItemStop
                                    target:self
                                    action:@selector(didTapToolbarButton:)];
-    [stopButton setTag: WebViewGoToSafari];
+    [stopButton setTag: WebViewStopDownload];
     
     UIBarButtonItem *safariButton = [[UIBarButtonItem alloc]
                                      initWithImage: [UIImage systemImageNamed:@"safari"]
                                      style:UIBarButtonItemStylePlain
                                      target:self
                                      action:@selector(didTapToolbarButton:)];
-    [safariButton setTag: 1005];
+    [safariButton setTag: WebViewGoToSafari];
     
-    NSArray *buttons = [NSArray arrayWithObjects:backButton, spacer, forwardButton, spacer, refreshButton, spacer, stopButton, spacer, safariButton, nil];
+    NSArray *buttons = [NSArray arrayWithObjects:_backButton, spacer, _forwardButton, spacer, refreshButton, spacer, stopButton, spacer, safariButton, nil];
     
-    self.navigationController.toolbar.backgroundColor = [UIColor whiteColor];
+    [self.navigationController hidesBottomBarWhenPushed];
     [self setToolbarItems: buttons];
-    [self.navigationController.toolbar.layer setBackgroundColor: [UIColor whiteColor].CGColor];
-    [self.navigationController setHidesBarsOnSwipe:true];
-    [self.navigationController setToolbarHidden: false];
+    [self.navigationController setHidesBarsOnSwipe:YES];
+    [self.navigationController setToolbarHidden: NO];
 }
 
 - (void) didTapToolbarButton: (UIBarButtonItem *) sender {
@@ -143,8 +141,18 @@ typedef NS_ENUM(NSInteger, WebViewButtonType) {
     }
 }
 
+- (void) createProgressView {
+    _progressView = [[[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleBar] autorelease];
+    [self.navigationController.navigationBar addSubview:_progressView];
+    
+    [_progressView.leadingAnchor constraintEqualToAnchor:self.navigationController.navigationBar.leadingAnchor].active = YES;
+    [_progressView.trailingAnchor constraintEqualToAnchor:self.navigationController.navigationBar.trailingAnchor].active = YES;
+    [_progressView.topAnchor constraintEqualToAnchor:self.navigationController.navigationBar.bottomAnchor].active = YES;
+    [_progressView setTranslatesAutoresizingMaskIntoConstraints:NO];
+}
+
 - (void)loadInSafariBrowser {
-    SFSafariViewController *controller = [[SFSafariViewController alloc] initWithURL:_link];
+    SFSafariViewController *controller = [[[SFSafariViewController alloc] initWithURL:_link] autorelease];
     controller.modalPresentationStyle = UIModalPresentationOverFullScreen;
     controller.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     

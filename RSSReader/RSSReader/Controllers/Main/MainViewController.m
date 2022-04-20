@@ -64,7 +64,7 @@
   UIAlertController * alertController = [UIAlertController alertControllerWithTitle: @"Alert"
                                  message: message
                                  preferredStyle: UIAlertControllerStyleAlert];
-  UIAlertAction * action = [UIAlertAction actionWithTitle: @ "Dismiss"
+  UIAlertAction * action = [UIAlertAction actionWithTitle: @ "Refresh"
                             style: UIAlertActionStyleDefault handler: ^ (UIAlertAction *action) {
       [self loadDataAndParsingOnNewThread];
                             }];
