@@ -86,8 +86,6 @@
 		4148533327D53CB7009C6E59 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				86BC57AD27FA04AB001F0711 /* NewsCellWithDesc */,
-				4148BC7F27D56734004E7C0D /* NewsCell */,
 				866549A927D1518F0011AF08 /* MainViewController.h */,
 				866549AA27D1518F0011AF08 /* MainViewController.m */,
 				4148533427D53DD5009C6E59 /* MainViewController.xib */,
@@ -135,6 +133,7 @@
 			children = (
 				4148533727D559A1009C6E59 /* Model */,
 				4148533227D53CAE009C6E59 /* Controllers */,
+				86C89CBE2810A65500F066FD /* Cells */,
 				866549C327D1744C0011AF08 /* Utilities */,
 				4148533127D53C93009C6E59 /* Support Files */,
 				866549A327D1518F0011AF08 /* AppDelegate.h */,
@@ -172,6 +171,15 @@
 				86BC57DB27FB70F3001F0711 /* WebViewController.xib */,
 			);
 			path = WebView;
+			sourceTree = "<group>";
+		};
+		86C89CBE2810A65500F066FD /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				4148BC7F27D56734004E7C0D /* NewsCell */,
+				86BC57AD27FA04AB001F0711 /* NewsCellWithDesc */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

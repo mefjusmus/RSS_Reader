@@ -28,13 +28,14 @@
     if (self) {
         _title = [[[ParserHelper getStringInDictionary:dictionary forKey:@"title"] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] copy];
         _link = [[NSURL URLWithString:[ParserHelper getUrlInDictionary:dictionary forKey:@"link"]] copy];
-        _publicationDate = [[ParserHelper getDateFromStringInDictionary:dictionary forKey:@"pubDate"] copy];
+//        _publicationDate = [[ParserHelper getDateFromStringInDictionary:dictionary forKey:@"pubDate"] copy];
         _descInfo = [[[ParserHelper getStringInDictionary:dictionary forKey:@"description"]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]copy];
+        _dateString = [[ParserHelper getDateStringFromStringInDictionary:dictionary forKey: @"pubDate"] copy];
         
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.dateFormat = @"yyyy-MM-dd 'at' HH:mm";
-        _dateString = [[dateFormatter stringFromDate:_publicationDate] copy];
-        [dateFormatter release];
+//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//        dateFormatter.dateFormat = @"yyyy-MM-dd 'at' HH:mm";
+//        _dateString = [[dateFormatter stringFromDate:_publicationDate] copy];
+//        [dateFormatter release];
     }
     
     return self;
